@@ -955,6 +955,17 @@
         _reorderSelected: function(optGroup) {
             var e = this._elements;
             var g = this._groups.get(optGroup);
+			
+			// Go through each element and determine which is an option or selected item
+			$.each(e, function (key, value) {
+				
+				if (e[key].selected == true) {
+					e[key].listElement.find('div').prepend('<span class="ui-corner-all ui-icon ui-icon-minus" style="float: right"></span>');
+				} else if (e[key].selected == false) {
+					e[key].listElement.find('div').prepend('<span class="ui-corner-all ui-icon ui-icon-plus" style="float: right"></span>');
+				}
+			});
+			
             var container = g.groupElement ? g.groupElement : this._widget.element;
             var prevElement;
             $('.option-element', g['selected'].listContainer).each(function() {
@@ -1213,6 +1224,18 @@
             if (eData.optionElement.attr('disabled') && selected) {
                 return;
             }
+			
+			// If is already selected going to available
+			if (!eData.selected) {
+				// Remove plus				
+				eData.listElement.find('span').remove();
+				eData.listElement.find('div').prepend('<span class="ui-corner-all ui-icon ui-icon-minus" style="float: right"></span>');
+			}
+			else if (eData.selected) {
+				// Remove minus				
+				eData.listElement.find('span').remove();
+				eData.listElement.find('div').prepend('<span class="ui-corner-all ui-icon ui-icon-plus" style="float: right"></span>');
+			}
 
             eData.optionElement.prop('selected', eData.selected = selected);
 
